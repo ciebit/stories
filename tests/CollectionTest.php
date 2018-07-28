@@ -14,7 +14,7 @@ class CollectionTest extends TestCase
 
     private $collection; #:Collection
 
-    public function testValues()
+    public function testMethods()
     {
         $this->assertEquals(self::totalItens, $this->collection->count());
         $this->assertInstanceOf(ArrayIterator::class, $this->collection->getIterator());
