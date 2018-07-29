@@ -22,6 +22,11 @@ class Collection implements Countable
         return $this;
     }
 
+    public function getArrayObject(): ArrayObject
+    {
+        return clone $this->stories;
+    }
+
     public function getIterator(): ArrayIterator
     {
         return $this->stories->getIterator();
