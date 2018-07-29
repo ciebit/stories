@@ -10,9 +10,9 @@ use function implode;
 abstract class DatabaseSqlFilters
 {
     private $bindList; #:Array
-    private $filersSql; #:Array
-    private $startingLine; #:int
-    private $totalLines; #:int
+    private $filtersSql; #:Array
+    private $limit; #:int
+    private $offset; #:int
 
     protected function addBind(string $key, int $type, $value): self
     {
@@ -33,12 +33,16 @@ abstract class DatabaseSqlFilters
 
     protected function addSqlFilter(string $sql): self
     {
-        $this->filersSql[] = $sql;
+        $this->filtersSql[] = $sql;
         return $this;
     }
 
     protected function bind(PDOStatement $statment): self
     {
+        if (! is_array($this->bindList)) {
+            return $this;
+        }
+
         foreach ($this->bindList as $bind) {
             $statment->bindValue(":{$bind['key']}", $bind['value'], $bind['type']);
         }
@@ -51,28 +55,28 @@ abstract class DatabaseSqlFilters
         if (empty($this->filtersSql)) {
             return '1';
         }
-        return implode(' AND ', $this->filters);
+        return implode(' AND ', $this->filtersSql);
     }
 
     protected function generateSqlLimit(): string
     {
-        $init = (int) $this->startingLine;
+        $init = (int) $this->offset;
         $sql =
-            $this->totalLines === null
+            $this->limit === null
             ? ''
-            : "LIMIT {$init},{$this->totalLines}";
+            : "LIMIT {$init},{$this->limit}";
         return $sql;
     }
 
-    protected function setStartingLine(int $lineInit): self
+    protected function setLimit(int $total): self
     {
-        $this->startingLine = $lineInit;
+        $this->limit = $total;
         return $this;
     }
 
-    protected function setTotalLines(int $total): self
+    protected function setOffset(int $lineInit): self
     {
-        $this->totalLines = $total;
+        $this->offset = $lineInit;
         return $this;
     }
 }

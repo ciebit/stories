@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Ciebit\Stories\Storages;
 
 use Ciebit\Stories\Collection;
-use Ciebit\Stories\Factories\FromArray as FactoryFromArray;
+use Ciebit\Stories\Builders\FromArray as BuilderFromArray;
 use Ciebit\Stories\Story;
 use Ciebit\Stories\Status;
 use Ciebit\Stories\Storages\Storage;
@@ -20,7 +20,7 @@ class DatabaseSql extends DatabaseSqlFilters implements Storage
     public function __construct(PDO $pdo)
     {
         $this->pdo = $pdo;
-        $this->table = 'cb_story';
+        $this->table = 'cb_stories';
     }
 
     public function addFilterById(int $id, string $operator = '='): Storage
@@ -40,7 +40,7 @@ class DatabaseSql extends DatabaseSqlFilters implements Storage
         return $this;
     }
 
-    public function get(): Story
+    public function get(): ?Story
     {
         $statement = $this->pdo->prepare("
             SELECT SQL_CALC_FOUND_ROWS
@@ -56,7 +56,13 @@ class DatabaseSql extends DatabaseSqlFilters implements Storage
             throw new Exception('ciebit.stories.storages.database.get_error', 2);
         }
 
-        return FactoryFromArray::convert($story);
+        $storyData = $statement->fetch(PDO::FETCH_ASSOC);
+
+        if ($storyData == false) {
+            return null;
+        }
+
+        return (new BuilderFromArray)->setData($storyData)->build();
     }
 
     public function getAll(): Collection
@@ -77,8 +83,11 @@ class DatabaseSql extends DatabaseSqlFilters implements Storage
 
         $collection = new Collection;
 
+        $builder = new BuilderFromArray;
         while ($story = $statement->fetch(PDO::FETCH_ASSOC)) {
-            $collection->add(FactoryFromArray::convert($story));
+            $collection->add(
+                $builder->setData($story)->build()
+            );
         }
 
         return $collection;
@@ -105,7 +114,7 @@ class DatabaseSql extends DatabaseSqlFilters implements Storage
 
     public function setStartingLine(int $lineInit): Storage
     {
-        parent::setStartingLine($lineInit);
+        parent::setOffset($lineInit);
         return $this;
     }
 
@@ -117,7 +126,7 @@ class DatabaseSql extends DatabaseSqlFilters implements Storage
 
     public function setTotalLines(int $total): Storage
     {
-        parent::setTotalLines($total);
+        parent::setLimit($total);
         return $this;
     }
 }

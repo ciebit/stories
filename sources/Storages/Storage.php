@@ -13,7 +13,7 @@ interface Storage
 
     public function addFilterByStatus(Status $status, string $operator = '='): self;
 
-    public function get(): Story;
+    public function get(): ?Story;
 
     public function getAll(): Collection;
 
