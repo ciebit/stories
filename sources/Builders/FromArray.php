@@ -13,7 +13,7 @@ class FromArray implements Builder
 {
     private $data; #:array
 
-    public function __construct(array $data)
+    public function setData(array $data): self
     {
         $this->data = $data;
         return $this;
@@ -21,7 +21,10 @@ class FromArray implements Builder
 
     public function build(): Story
     {
-        if (! isset($this->data['title'])) {
+        if (
+            ! is_array($this->data) OR
+            ! isset($this->data['title'])
+        ) {
             throw new Exception('ciebit.stories.builders.invalid', 3);
         }
 
@@ -34,7 +37,7 @@ class FromArray implements Builder
         && $story->setId((int) $this->data['id']);
 
         isset($this->data['body'])
-        && $story->setStory((string) $this->data['body']);
+        && $story->setBody((string) $this->data['body']);
 
         isset($this->data['summary'])
         && $story->setSummary((string) $this->data['summary']);
