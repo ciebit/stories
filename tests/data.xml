@@ -1,0 +1,43 @@
+<?xml version="1.0" ?>
+<dataset>
+    <table name="cb_stories">
+        <column>id</column>
+        <column>title</column>
+        <column>summary</column>
+        <column>body</column>
+        <column>datetime</column>
+        <column>uri</column>
+        <column>views</column>
+        <column>status</column>
+        <row>
+            <value>1</value>
+            <value>Title New 1</value>
+            <value>Summary new 1</value>
+            <value>Text new 1</value>
+            <value>2018-07-29 16:26:00</value>
+            <value>title-new-1</value>
+            <value>11</value>
+            <value>1</value>
+        </row>
+        <row>
+            <value>2</value>
+            <value>Title New 2</value>
+            <value>Summary new 2</value>
+            <value>Text new 2</value>
+            <value>2018-07-29 16:27:00</value>
+            <value>title-new-2</value>
+            <value>12</value>
+            <value>2</value>
+        </row>
+        <row>
+            <value>3</value>
+            <value>Title New 3</value>
+            <value>Summary new 3</value>
+            <value>Text new 3</value>
+            <value>2018-07-29 16:28:00</value>
+            <value>title-new-3</value>
+            <value>13</value>
+            <value>3</value>
+        </row>
+    </table>
+</dataset>
