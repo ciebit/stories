@@ -9,53 +9,105 @@ use Ciebit\Stories\Tests\Connection;
 
 class DatabaseSqlTest extends Connection
 {
+    public function getDatabase(): DatabaseSql
+    {
+        return new DatabaseSql($this->getPdo());
+    }
+
     public function testGet(): void
     {
-        $this->database = new DatabaseSql($this->getPdo());
-        $story = $this->database->get();
+        $story = $this->getDatabase()->get();
         $this->assertInstanceOf(Story::class, $story);
+    }
+
+    public function testGetFilterByBody(): void
+    {
+        $database = $this->getDatabase();
+        static $body = 'Text New 1';
+        $database->addFilterByBody($body, '=');
+        $story = $database->get();
+        $this->assertEquals(1, $story->getId());
+
+        $database = $this->getDatabase();
+        $database->addFilterByBody('%New 2', 'LIKE');
+        $story = $database->get();
+        $this->assertEquals(2, $story->getId());
+
+        $database = $this->getDatabase();
+        $database->addFilterByBody('Fourth New%', 'LIKE');
+        $story = $database->get();
+        $this->assertEquals(4, $story->getId());
+
+        $database = $this->getDatabase();
+        $database->addFilterByBody('%Five%', 'LIKE');
+        $story = $database->get();
+        $this->assertEquals(5, $story->getId());
     }
 
     public function testGetFilterByStatus(): void
     {
-        $this->database = new DatabaseSql($this->getPdo());
-        $this->database->addFilterByStatus(Status::ACTIVE());
-        $story = $this->database->get();
+        $database = new DatabaseSql($this->getPdo());
+        $database->addFilterByStatus(Status::ACTIVE());
+        $story = $database->get();
         $this->assertEquals(Status::ACTIVE(), $story->getStatus());
     }
 
     public function testGetFilterById(): void
     {
         $id = 2;
-        $this->database = new DatabaseSql($this->getPdo());
-        $this->database->addFilterById($id+0);
-        $story = $this->database->get();
+        $database = new DatabaseSql($this->getPdo());
+        $database->addFilterById($id+0);
+        $story = $database->get();
         $this->assertEquals($id, $story->getId());
+    }
+
+    public function testGetFilterByTitle(): void
+    {
+        $database = $this->getDatabase();
+        static $title1 = 'Title New 1';
+        $database->addFilterByTitle($title1, '=');
+        $story = $database->get();
+        $this->assertEquals($title1, $story->getTitle());
+
+        $database = $this->getDatabase();
+        $database->addFilterByTitle('%New 2', 'LIKE');
+        $story = $database->get();
+        $this->assertEquals(2, $story->getId());
+
+        $database = $this->getDatabase();
+        $database->addFilterByTitle('Fourth New%', 'LIKE');
+        $story = $database->get();
+        $this->assertEquals(4, $story->getId());
+
+        $database = $this->getDatabase();
+        $database->addFilterByTitle('%Five%', 'LIKE');
+        $story = $database->get();
+        $this->assertEquals(5, $story->getId());
     }
 
     public function testGetAll(): void
     {
-        $this->database = new DatabaseSql($this->getPdo());
-        $stories = $this->database->getAll();
+        $database = new DatabaseSql($this->getPdo());
+        $stories = $database->getAll();
         $this->assertInstanceOf(Collection::class, $stories);
-        $this->assertCount(3, $stories);
+        $this->assertCount(5, $stories);
     }
 
     public function testGetAllFilterByStatus(): void
     {
-        $this->database = new DatabaseSql($this->getPdo());
-        $this->database->addFilterByStatus(Status::ACTIVE());
-        $stories = $this->database->getAll();
-        $this->assertCount(1, $stories);
+        $database = new DatabaseSql($this->getPdo());
+        $database->addFilterByStatus(Status::ACTIVE());
+        $stories = $database->getAll();
+        $this->assertCount(3, $stories);
         $this->assertEquals(Status::ACTIVE(), $stories->getArrayObject()->offsetGet(0)->getStatus());
     }
 
     public function testGetAllFilterById(): void
     {
         $id = 3;
-        $this->database = new DatabaseSql($this->getPdo());
-        $this->database->addFilterById($id+0);
-        $stories = $this->database->getAll();
+        $database = new DatabaseSql($this->getPdo());
+        $database->addFilterById($id+0);
+        $stories = $database->getAll();
         $this->assertCount(1, $stories);
         $this->assertEquals($id, $stories->getArrayObject()->offsetGet(0)->getId());
     }

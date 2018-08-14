@@ -39,5 +39,25 @@
             <value>13</value>
             <value>3</value>
         </row>
+        <row>
+            <value>4</value>
+            <value>Fourth New Title</value>
+            <value>Fourth new summary</value>
+            <value>Fourth new text</value>
+            <value>2018-08-14 10:00:00</value>
+            <value>title-new-4</value>
+            <value>2</value>
+            <value>3</value>
+        </row>
+        <row>
+            <value>5</value>
+            <value>New Five Title</value>
+            <value>New five summary</value>
+            <value>New five text</value>
+            <value>2018-08-13 10:01:00</value>
+            <value>title-new-5</value>
+            <value>1</value>
+            <value>3</value>
+        </row>
     </table>
 </dataset>
