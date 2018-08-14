@@ -23,6 +23,17 @@ class DatabaseSql extends DatabaseSqlFilters implements Storage
         $this->table = 'cb_stories';
     }
 
+    public function addFilterByBody(string $body, string $operator = '='): Storage
+    {
+        $key = 'body';
+        $field = '`story`.`body`';
+        $sql = "{$field} {$operator} :{$key}";
+
+        $this->addfilter($key, $sql, PDO::PARAM_STR, $body);
+
+        return $this;
+    }
+
     public function addFilterById(int $id, string $operator = '='): Storage
     {
         $key = 'id';
@@ -40,10 +51,21 @@ class DatabaseSql extends DatabaseSqlFilters implements Storage
         return $this;
     }
 
+    public function addFilterByTitle(string $title, string $operator = '='): Storage
+    {
+        $key = 'title';
+        $field = '`story`.`title`';
+        $sql = "{$field} {$operator} :{$key}";
+
+        $this->addfilter($key, $sql, PDO::PARAM_STR, $title);
+
+        return $this;
+    }
+
     public function get(): ?Story
     {
         $statement = $this->pdo->prepare("
-            SELECT SQL_CALC_FOUND_ROWS
+            SELECT
             {$this->getFields()}
             FROM {$this->table} as `story`
             WHERE {$this->generateSqlFilters()}
