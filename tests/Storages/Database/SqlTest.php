@@ -1,17 +1,17 @@
 <?php
-namespace Ciebit\Stories\Tests\Storages;
+namespace Ciebit\Stories\Tests\Storages\Database;
 
 use Ciebit\Stories\Collection;
 use Ciebit\Stories\Status;
 use Ciebit\Stories\Story;
-use Ciebit\Stories\Storages\DatabaseSql;
+use Ciebit\Stories\Storages\Database\Sql;
 use Ciebit\Stories\Tests\Connection;
 
-class DatabaseSqlTest extends Connection
+class SqlTest extends Connection
 {
-    public function getDatabase(): DatabaseSql
+    public function getDatabase(): Sql
     {
-        return new DatabaseSql($this->getPdo());
+        return new Sql($this->getPdo());
     }
 
     public function testGet(): void
@@ -46,7 +46,7 @@ class DatabaseSqlTest extends Connection
 
     public function testGetFilterByStatus(): void
     {
-        $database = new DatabaseSql($this->getPdo());
+        $database = $this->getDatabase();
         $database->addFilterByStatus(Status::ACTIVE());
         $story = $database->get();
         $this->assertEquals(Status::ACTIVE(), $story->getStatus());
@@ -55,7 +55,7 @@ class DatabaseSqlTest extends Connection
     public function testGetFilterById(): void
     {
         $id = 2;
-        $database = new DatabaseSql($this->getPdo());
+        $database = $this->getDatabase();
         $database->addFilterById($id+0);
         $story = $database->get();
         $this->assertEquals($id, $story->getId());
@@ -87,7 +87,7 @@ class DatabaseSqlTest extends Connection
 
     public function testGetAll(): void
     {
-        $database = new DatabaseSql($this->getPdo());
+        $database = $this->getDatabase();
         $stories = $database->getAll();
         $this->assertInstanceOf(Collection::class, $stories);
         $this->assertCount(5, $stories);
@@ -95,7 +95,7 @@ class DatabaseSqlTest extends Connection
 
     public function testGetAllFilterByStatus(): void
     {
-        $database = new DatabaseSql($this->getPdo());
+        $database = $this->getDatabase();
         $database->addFilterByStatus(Status::ACTIVE());
         $stories = $database->getAll();
         $this->assertCount(3, $stories);
@@ -105,7 +105,7 @@ class DatabaseSqlTest extends Connection
     public function testGetAllFilterById(): void
     {
         $id = 3;
-        $database = new DatabaseSql($this->getPdo());
+        $database = $this->getDatabase();
         $database->addFilterById($id+0);
         $stories = $database->getAll();
         $this->assertCount(1, $stories);

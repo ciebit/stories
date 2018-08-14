@@ -1,18 +1,18 @@
 <?php
 declare(strict_types=1);
 
-namespace Ciebit\Stories\Storages;
+namespace Ciebit\Stories\Storages\Database;
 
 use Ciebit\Stories\Collection;
 use Ciebit\Stories\Builders\FromArray as BuilderFromArray;
 use Ciebit\Stories\Story;
 use Ciebit\Stories\Status;
 use Ciebit\Stories\Storages\Storage;
-use Ciebit\Stories\Storages\DatabaseSqlFilters;
+use Ciebit\Stories\Storages\Database\SqlFilters;
 use Exception;
 use PDO;
 
-class DatabaseSql extends DatabaseSqlFilters implements Storage
+class Sql extends SqlFilters implements Storage
 {
     private $pdo; #: PDO
     private $table; #: string
