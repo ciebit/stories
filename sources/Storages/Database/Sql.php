@@ -1,18 +1,18 @@
 <?php
 declare(strict_types=1);
 
-namespace Ciebit\Stories\Storages;
+namespace Ciebit\Stories\Storages\Database;
 
 use Ciebit\Stories\Collection;
 use Ciebit\Stories\Builders\FromArray as BuilderFromArray;
 use Ciebit\Stories\Story;
 use Ciebit\Stories\Status;
 use Ciebit\Stories\Storages\Storage;
-use Ciebit\Stories\Storages\DatabaseSqlFilters;
+use Ciebit\Stories\Storages\Database\SqlFilters;
 use Exception;
 use PDO;
 
-class DatabaseSql extends DatabaseSqlFilters implements Storage
+class Sql extends SqlFilters implements Storage
 {
     private $pdo; #: PDO
     private $table; #: string
@@ -21,6 +21,17 @@ class DatabaseSql extends DatabaseSqlFilters implements Storage
     {
         $this->pdo = $pdo;
         $this->table = 'cb_stories';
+    }
+
+    public function addFilterByBody(string $body, string $operator = '='): Storage
+    {
+        $key = 'body';
+        $field = '`story`.`body`';
+        $sql = "{$field} {$operator} :{$key}";
+
+        $this->addfilter($key, $sql, PDO::PARAM_STR, $body);
+
+        return $this;
     }
 
     public function addFilterById(int $id, string $operator = '='): Storage
@@ -40,10 +51,21 @@ class DatabaseSql extends DatabaseSqlFilters implements Storage
         return $this;
     }
 
+    public function addFilterByTitle(string $title, string $operator = '='): Storage
+    {
+        $key = 'title';
+        $field = '`story`.`title`';
+        $sql = "{$field} {$operator} :{$key}";
+
+        $this->addfilter($key, $sql, PDO::PARAM_STR, $title);
+
+        return $this;
+    }
+
     public function get(): ?Story
     {
         $statement = $this->pdo->prepare("
-            SELECT SQL_CALC_FOUND_ROWS
+            SELECT
             {$this->getFields()}
             FROM {$this->table} as `story`
             WHERE {$this->generateSqlFilters()}

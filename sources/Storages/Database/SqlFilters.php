@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace Ciebit\Stories\Storages;
+namespace Ciebit\Stories\Storages\Database;
 
 use PDOStatement;
 
 use function implode;
 
-abstract class DatabaseSqlFilters
+abstract class SqlFilters
 {
     private $bindList; #:Array
     private $filtersSql; #:Array
