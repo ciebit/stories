@@ -6,6 +6,7 @@ use Ciebit\Stories\Status;
 use Ciebit\Stories\Story;
 use Ciebit\Stories\Storages\Database\Sql;
 use Ciebit\Stories\Tests\Connection;
+use DateTime;
 
 class SqlTest extends Connection
 {
@@ -110,5 +111,34 @@ class SqlTest extends Connection
         $stories = $database->getAll();
         $this->assertCount(1, $stories);
         $this->assertEquals($id, $stories->getArrayObject()->offsetGet(0)->getId());
+    }
+
+    public function testUpdate(): void
+    {
+        $body = 'new body';
+        $dateTime = new DateTime;
+        $status = Status::ACTIVE();
+        $summary = 'new summary';
+        $uri = 'new-uri';
+        $views = 13;
+
+        $database = $this->getDatabase();
+        $database->addFilterById(2);
+        $story = $database->get();
+        $story->setBody($body.'')
+        ->setDateTime(clone $dateTime)
+        ->setStatus(clone $status)
+        ->setSummary($summary.'')
+        ->setUri($uri.'')
+        ->setViews($views + 0);
+
+        $story = $database->update($story)->get();
+
+        $this->assertEquals($body, $story->getBody());
+        $this->assertEquals($dateTime->format('Y-m-d H:i:s'), $story->getDateTime()->format('Y-m-d H:i:s'));
+        $this->assertEquals($status, $story->getStatus());
+        $this->assertEquals($summary, $story->getSummary());
+        $this->assertEquals($uri, $story->getUri());
+        $this->assertEquals($views, $story->getViews());
     }
 }
