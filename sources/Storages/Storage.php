@@ -24,4 +24,6 @@ interface Storage
     public function setStartingLine(int $lineInit): self;
 
     public function setTotalLines(int $total): self;
+
+    public function update(Story $story): self;
 }

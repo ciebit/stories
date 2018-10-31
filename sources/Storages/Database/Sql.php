@@ -8,11 +8,12 @@ use Ciebit\Stories\Builders\FromArray as BuilderFromArray;
 use Ciebit\Stories\Story;
 use Ciebit\Stories\Status;
 use Ciebit\Stories\Storages\Storage;
+use Ciebit\Stories\Storages\Database\Database;
 use Ciebit\Stories\Storages\Database\SqlFilters;
 use Exception;
 use PDO;
 
-class Sql extends SqlFilters implements Storage
+class Sql extends SqlFilters implements Database
 {
     private $pdo; #: PDO
     private $table; #: string
@@ -75,7 +76,7 @@ class Sql extends SqlFilters implements Storage
         $this->bind($statement);
 
         if ($statement->execute() === false) {
-            throw new Exception('ciebit.stories.storages.database.get_error', 2);
+            throw new Exception('ciebit.stories.storages.get_error', 2);
         }
 
         $storyData = $statement->fetch(PDO::FETCH_ASSOC);
@@ -100,7 +101,7 @@ class Sql extends SqlFilters implements Storage
         $this->bind($statement);
 
         if ($statement->execute() === false) {
-            throw new Exception('ciebit.stories.storages.database.get_error', 2);
+            throw new Exception('ciebit.stories.storages.get_error', 2);
         }
 
         $collection = new Collection;
@@ -149,6 +150,40 @@ class Sql extends SqlFilters implements Storage
     public function setTotalLines(int $total): Storage
     {
         parent::setLimit($total);
+        return $this;
+    }
+
+    /**
+     * @throw Exception
+    */
+    public function update(Story $story): Storage
+    {
+        $statement = $this->pdo->prepare("
+            UPDATE `{$this->table}` SET
+                `title` = :title,
+                `summary` = :summary,
+                `body` = :body,
+                `datetime` = :datetime,
+                `uri` = :uri,
+                `views` = :views,
+                `status` = :status
+            WHERE `id` = :id
+            LIMIT 1
+        ");
+
+        $statement->bindValue(':title', $story->getTitle(), PDO::PARAM_STR);
+        $statement->bindValue(':summary', $story->getSummary(), PDO::PARAM_STR);
+        $statement->bindValue(':body', $story->getBody(), PDO::PARAM_STR);
+        $statement->bindValue(':datetime', $story->getDateTime()->format('Y-m-d H:i:s'), PDO::PARAM_STR);
+        $statement->bindValue(':uri', $story->getUri(), PDO::PARAM_STR);
+        $statement->bindValue(':views', $story->getViews(), PDO::PARAM_INT);
+        $statement->bindValue(':status', $story->getStatus(), PDO::PARAM_INT);
+        $statement->bindValue(':id', $story->getId(), PDO::PARAM_INT);
+
+        if ($statement->execute() === false) {
+            throw new Exception('ciebit.stories.storages.update_error', 3);
+        }
+
         return $this;
     }
 }
