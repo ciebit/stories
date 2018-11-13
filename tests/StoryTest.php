@@ -16,6 +16,7 @@ class StoryTest extends TestCase
     private const title = 'Title test';
     private const uri = 'title-test';
     private const views = 2;
+    private const language = 'en';
 
     private $story; #:Story
 
@@ -29,6 +30,7 @@ class StoryTest extends TestCase
         $this->assertEquals(self::title, $this->story->getTitle());
         $this->assertEquals(self::uri, $this->story->getUri());
         $this->assertEquals(self::views, $this->story->getViews());
+        $this->assertEquals(self::language, $this->story->getLanguage());
     }
 
     protected function setUp()
@@ -41,6 +43,7 @@ class StoryTest extends TestCase
         ->setId(self::id)
         ->setViews(self::views)
         ->setStatus(new Status(self::status))
+        ->setLanguage(self::language)
         ;
     }
 }
