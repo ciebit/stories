@@ -17,6 +17,8 @@ interface Storage
 
     public function addFilterByTitle(string $title, string $operator = '='): self;
 
+    public function addFilterByLanguage(string $language, string $operator = '='): self;
+
     public function get(): ?Story;
 
     public function getAll(): Collection;

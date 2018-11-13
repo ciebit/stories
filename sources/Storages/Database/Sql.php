@@ -63,6 +63,17 @@ class Sql extends SqlFilters implements Database
         return $this;
     }
 
+    public function addFilterByLanguage(string $language, string $operator = '='): Storage
+    {
+        $key = 'laguage';
+        $field = '`story`.`language`';
+        $sql = "{$field} {$operator} :{$key}";
+
+        $this->addfilter($key, $sql, PDO::PARAM_STR, $language);
+
+        return $this;
+    }
+
     public function get(): ?Story
     {
         $statement = $this->pdo->prepare("
@@ -126,6 +137,7 @@ class Sql extends SqlFilters implements Database
             `story`.`datetime`,
             `story`.`uri`,
             `story`.`views`,
+            `story`.`language`,
             `story`.`status`
         ';
     }
@@ -166,6 +178,7 @@ class Sql extends SqlFilters implements Database
                 `datetime` = :datetime,
                 `uri` = :uri,
                 `views` = :views,
+                `language` = :language,
                 `status` = :status
             WHERE `id` = :id
             LIMIT 1
@@ -178,6 +191,7 @@ class Sql extends SqlFilters implements Database
         $statement->bindValue(':uri', $story->getUri(), PDO::PARAM_STR);
         $statement->bindValue(':views', $story->getViews(), PDO::PARAM_INT);
         $statement->bindValue(':status', $story->getStatus(), PDO::PARAM_INT);
+        $statement->bindValue(':language', $story->getLanguage(), PDO::PARAM_STR);
         $statement->bindValue(':id', $story->getId(), PDO::PARAM_INT);
 
         if ($statement->execute() === false) {
