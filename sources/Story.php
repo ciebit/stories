@@ -18,6 +18,7 @@ class Story
     private $uri; #:string
     private $views; #:int
     private $language; #string
+    private $languageReferences; #array
 
     public function __construct(string $title, Status $status)
     {
@@ -30,6 +31,7 @@ class Story
         $this->uri = '';
         $this->views = 0;
         $this->language = 'pt-br';
+        $this->languageReferences = [];
 
         $this->valid();
     }
@@ -79,6 +81,11 @@ class Story
         return $this->language;
     }
 
+    public function getLanguageReferences(): array
+    {
+        return $this->languageReferences;
+    }
+
     public function setBody(string $body): self
     {
         $this->body = $body;
@@ -125,6 +132,12 @@ class Story
     public function setLanguage(string $language): self
     {
         $this->language = $language;
+        return $this;
+    }
+
+    public function setLanguageReferences(array $languageReference): self
+    {
+        $this->languageReferences[] = $languageReference;
         return $this;
     }
 
