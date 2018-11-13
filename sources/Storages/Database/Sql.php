@@ -138,6 +138,7 @@ class Sql extends SqlFilters implements Database
             `story`.`uri`,
             `story`.`views`,
             `story`.`language`,
+            `story`.`languages_references`,
             `story`.`status`
         ';
     }
