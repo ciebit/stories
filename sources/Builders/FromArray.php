@@ -48,6 +48,9 @@ class FromArray implements Builder
         isset($this->data['views'])
         && $story->setViews((int) $this->data['views']);
 
+        isset($this->data['language'])
+        && $story->setLanguage($this->data['language']);
+
         isset($this->data['status'])
         && $story->setStatus(new Status((int) $this->data['status']));
 
