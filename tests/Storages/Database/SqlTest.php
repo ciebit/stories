@@ -86,6 +86,25 @@ class SqlTest extends Connection
         $this->assertEquals(5, $story->getId());
     }
 
+    public function testGetFilterByLanguage(): void
+    {
+        $database = $this->getDatabase();
+        static $spanish = 'es';
+        $database->addFilterByLanguage($spanish);
+        $story = $database->get();
+        $this->assertEquals($spanish, $story->getLanguage());
+
+        static $english = 'en';
+        $database->addFilterByLanguage($english);
+        $story2 = $database->get();
+        $this->assertEquals($english, $story2->getLanguage());
+
+        static $portuguese = 'pt-br';
+        $database->addFilterByLanguage($portuguese);
+        $story3 = $database->get();
+        $this->assertEquals($portuguese, $story3->getLanguage());
+    }
+
     public function testGetAll(): void
     {
         $database = $this->getDatabase();
