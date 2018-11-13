@@ -9,16 +9,18 @@
         <column>uri</column>
         <column>views</column>
         <column>language</column>
+        <column>languages_references</column>
         <column>status</column>
         <row>
             <value>1</value>
-            <value>Title New 1</value>
-            <value>Summary new 1</value>
-            <value>Text new 1</value>
+            <value>Titulo da notícia 1</value>
+            <value>Resumo da notícia 1</value>
+            <value>Texto da notícia 1</value>
             <value>2018-07-29 16:26:00</value>
-            <value>title-new-1</value>
+            <value>titulo-da-noticia-1</value>
             <value>11</value>
             <null/>
+            <value>{"en": 6, "es": 7}</value>
             <value>1</value>
         </row>
         <row>
@@ -30,6 +32,7 @@
             <value>title-new-2</value>
             <value>12</value>
             <value>pt-br</value>
+            <null/>
             <value>2</value>
         </row>
         <row>
@@ -41,6 +44,7 @@
             <value>title-new-3</value>
             <value>13</value>
             <value>en</value>
+            <null/>
             <value>3</value>
         </row>
         <row>
@@ -52,6 +56,7 @@
             <value>title-new-4</value>
             <value>2</value>
             <value>es</value>
+            <null/>
             <value>3</value>
         </row>
         <row>
@@ -63,7 +68,32 @@
             <value>title-new-5</value>
             <value>1</value>
             <value>pt-br</value>
+            <null/>
             <value>3</value>
+        </row>
+        <row>
+            <value>6</value>
+            <value>News Title 1</value>
+            <value>News Summary 1</value>
+            <value>News Text 1</value>
+            <value>2018-07-29 16:26:00</value>
+            <value>news-title-1</value>
+            <value>11</value>
+            <null/>
+            <value>{"pt-BR": 1, "es": 7}</value>
+            <value>1</value>
+        </row>
+        <row>
+            <value>7</value>
+            <value>Titulo da novedade 1</value>
+            <value>Resumo da novedade 1</value>
+            <value>Texto da novedade 1</value>
+            <value>2018-07-29 16:26:00</value>
+            <value>titulo-da-novedade-1</value>
+            <value>11</value>
+            <null/>
+            <value>{"en": 6, "pt-BR": 1}</value>
+            <value>1</value>
         </row>
     </table>
 </dataset>
