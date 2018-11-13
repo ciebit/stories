@@ -8,6 +8,7 @@
         <column>datetime</column>
         <column>uri</column>
         <column>views</column>
+        <column>language</column>
         <column>status</column>
         <row>
             <value>1</value>
@@ -17,6 +18,7 @@
             <value>2018-07-29 16:26:00</value>
             <value>title-new-1</value>
             <value>11</value>
+            <null/>
             <value>1</value>
         </row>
         <row>
@@ -27,6 +29,7 @@
             <value>2018-07-29 16:27:00</value>
             <value>title-new-2</value>
             <value>12</value>
+            <value>pt-br</value>
             <value>2</value>
         </row>
         <row>
@@ -37,6 +40,7 @@
             <value>2018-07-29 16:28:00</value>
             <value>title-new-3</value>
             <value>13</value>
+            <value>en</value>
             <value>3</value>
         </row>
         <row>
@@ -47,6 +51,7 @@
             <value>2018-08-14 10:00:00</value>
             <value>title-new-4</value>
             <value>2</value>
+            <value>es</value>
             <value>3</value>
         </row>
         <row>
@@ -57,6 +62,7 @@
             <value>2018-08-13 10:01:00</value>
             <value>title-new-5</value>
             <value>1</value>
+            <value>pt-br</value>
             <value>3</value>
         </row>
     </table>
