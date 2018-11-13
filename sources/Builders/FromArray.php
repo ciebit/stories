@@ -51,6 +51,9 @@ class FromArray implements Builder
         isset($this->data['language'])
         && $story->setLanguage($this->data['language']);
 
+        isset($this->data['languages_references'])
+        && $story->setLanguageReferences(json_decode($this->data['languages_references'], true));
+
         isset($this->data['status'])
         && $story->setStatus(new Status((int) $this->data['status']));
 
