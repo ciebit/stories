@@ -5,7 +5,9 @@ namespace Ciebit\Stories;
 
 use DateTime;
 use Exception;
+use ArrayObject;
 use Ciebit\Stories\Status;
+use Ciebit\Stories\LanguageReference;
 
 class Story
 {
@@ -18,7 +20,7 @@ class Story
     private $uri; #:string
     private $views; #:int
     private $language; #string
-    private $languageReferences; #array
+    private $languageReferences; #ArrayObject
 
     public function __construct(string $title, Status $status)
     {
@@ -31,7 +33,7 @@ class Story
         $this->uri = '';
         $this->views = 0;
         $this->language = 'pt-br';
-        $this->languageReferences = [];
+        $this->languageReferences = new ArrayObject;
 
         $this->valid();
     }
@@ -81,7 +83,7 @@ class Story
         return $this->language;
     }
 
-    public function getLanguageReferences(): array
+    public function getLanguageReferences(): ArrayObject
     {
         return $this->languageReferences;
     }
@@ -135,9 +137,9 @@ class Story
         return $this;
     }
 
-    public function setLanguageReferences(array $languageReference): self
+    public function addLanguageReference(LanguageReference $languageReference): self
     {
-        $this->languageReferences[] = $languageReference;
+        $this->languageReferences->append($languageReference);
         return $this;
     }
 
