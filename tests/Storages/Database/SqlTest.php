@@ -4,8 +4,10 @@ namespace Ciebit\Stories\Tests\Storages\Database;
 use Ciebit\Stories\Collection;
 use Ciebit\Stories\Status;
 use Ciebit\Stories\Story;
+use Ciebit\Stories\LanguageReference;
 use Ciebit\Stories\Storages\Database\Sql;
 use Ciebit\Stories\Tests\Connection;
+use ArrayObject;
 use DateTime;
 
 class SqlTest extends Connection
@@ -137,8 +139,10 @@ class SqlTest extends Connection
         $database = $this->getDatabase();
         $story = $database->get();
 
-        $refs = $story->getLanguageReferences()[0];
-        $this->assertEquals(6, $refs['en']);
+        $refs = $story->getLanguageReferences();
+        $this->assertInstanceOf(ArrayObject::class, $refs);
+        $this->assertInstanceOf(LanguageReference::class, $refs->offSetGet(0));
+        $this->assertEquals(6, $refs->offsetGet(0)->getReferenceId());
     }
 
     public function testUpdate(): void
