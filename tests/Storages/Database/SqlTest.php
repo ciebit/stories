@@ -4,8 +4,10 @@ namespace Ciebit\Stories\Tests\Storages\Database;
 use Ciebit\Stories\Collection;
 use Ciebit\Stories\Status;
 use Ciebit\Stories\Story;
+use Ciebit\Stories\LanguageReference;
 use Ciebit\Stories\Storages\Database\Sql;
 use Ciebit\Stories\Tests\Connection;
+use ArrayObject;
 use DateTime;
 
 class SqlTest extends Connection
@@ -24,7 +26,7 @@ class SqlTest extends Connection
     public function testGetFilterByBody(): void
     {
         $database = $this->getDatabase();
-        static $body = 'Text New 1';
+        static $body = 'Texto da notícia 1';
         $database->addFilterByBody($body, '=');
         $story = $database->get();
         $this->assertEquals(1, $story->getId());
@@ -65,7 +67,7 @@ class SqlTest extends Connection
     public function testGetFilterByTitle(): void
     {
         $database = $this->getDatabase();
-        static $title1 = 'Title New 1';
+        static $title1 = 'Titulo da notícia 1';
         $database->addFilterByTitle($title1, '=');
         $story = $database->get();
         $this->assertEquals($title1, $story->getTitle());
@@ -110,7 +112,7 @@ class SqlTest extends Connection
         $database = $this->getDatabase();
         $stories = $database->getAll();
         $this->assertInstanceOf(Collection::class, $stories);
-        $this->assertCount(5, $stories);
+        $this->assertCount(7, $stories);
     }
 
     public function testGetAllFilterByStatus(): void
@@ -130,6 +132,17 @@ class SqlTest extends Connection
         $stories = $database->getAll();
         $this->assertCount(1, $stories);
         $this->assertEquals($id, $stories->getArrayObject()->offsetGet(0)->getId());
+    }
+
+    public function testLanguageReferences(): void
+    {
+        $database = $this->getDatabase();
+        $story = $database->get();
+
+        $refs = $story->getLanguageReferences();
+        $this->assertInstanceOf(ArrayObject::class, $refs);
+        $this->assertInstanceOf(LanguageReference::class, $refs->offSetGet(0));
+        $this->assertEquals(6, $refs->offsetGet(0)->getReferenceId());
     }
 
     public function testUpdate(): void

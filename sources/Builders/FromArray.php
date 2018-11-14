@@ -8,6 +8,7 @@ use Exception;
 use Ciebit\Stories\Builders\Builder;
 use Ciebit\Stories\Status;
 use Ciebit\Stories\Story;
+use Ciebit\Stories\LanguageReference;
 
 class FromArray implements Builder
 {
@@ -50,9 +51,16 @@ class FromArray implements Builder
 
         isset($this->data['language'])
         && $story->setLanguage($this->data['language']);
-
+        
         isset($this->data['status'])
         && $story->setStatus(new Status((int) $this->data['status']));
+        
+        if (isset($this->data['languages_references'])) {
+            $languageReferences = json_decode($this->data['languages_references'], true);
+            foreach ($languageReferences as $languageCode => $id) {
+                $story->addLanguageReference(new LanguageReference($languageCode, $id));
+            }
+        }
 
         return $story;
     }

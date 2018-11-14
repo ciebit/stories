@@ -6,6 +6,7 @@ CREATE TABLE IF NOT EXISTS `cb_stories` (
   `datetime` datetime DEFAULT NULL,
   `uri`      varchar(300) DEFAULT NULL,
   `views`    int(10) unsigned NOT NULL DEFAULT '0',
+  `language`    varchar(6) DEFAULT NULL,
   `status`   tinyint(1) unsigned NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='version:1.0';
