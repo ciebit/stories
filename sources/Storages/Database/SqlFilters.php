@@ -9,6 +9,8 @@ use function implode;
 
 abstract class SqlFilters
 {
+    static private $valueKey = 0;
+
     private $bindList; #:Array
     private $filtersSql; #:Array
     private $limit; #:int
@@ -66,6 +68,11 @@ abstract class SqlFilters
             ? ''
             : "LIMIT {$init},{$this->limit}";
         return $sql;
+    }
+
+    protected function getValueKey(): string
+    {
+        return 'value_'. self::$valueKey++;
     }
 
     protected function setLimit(int $total): self

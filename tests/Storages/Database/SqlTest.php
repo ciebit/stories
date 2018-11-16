@@ -90,19 +90,18 @@ class SqlTest extends Connection
 
     public function testGetFilterByLanguage(): void
     {
-        $database = $this->getDatabase();
         static $spanish = 'es';
-        $database->addFilterByLanguage('=', $spanish);
+        $database = $this->getDatabase()->addFilterByLanguage('=', $spanish);
         $story = $database->get();
         $this->assertEquals($spanish, $story->getLanguage());
 
         static $english = 'en';
-        $database->addFilterByLanguage('=', $english);
+        $database = $this->getDatabase()->addFilterByLanguage('=', $english);
         $story2 = $database->get();
         $this->assertEquals($english, $story2->getLanguage());
 
         static $portuguese = 'pt-br';
-        $database->addFilterByLanguage('=', $portuguese);
+        $database = $this->getDatabase()->addFilterByLanguage('=', $portuguese);
         $story3 = $database->get();
         $this->assertEquals($portuguese, $story3->getLanguage());
     }
@@ -132,6 +131,11 @@ class SqlTest extends Connection
         $stories = $database->getAll();
         $this->assertCount(1, $stories);
         $this->assertEquals($id, $stories->getArrayObject()->offsetGet(0)->getId());
+
+        $stories = $this->getDatabase()->addFilterById('=', 2, 3)->getAll();
+        $this->assertCount(2, $stories);
+        $this->assertEquals(2, $stories->getById(2)->getId());
+        $this->assertEquals(3, $stories->getById(3)->getId());
     }
 
     public function testLanguageReferences(): void

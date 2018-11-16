@@ -14,10 +14,17 @@ class CollectionTest extends TestCase
 
     private $collection; #:Collection
 
-    public function testMethods()
+    public function testMethods(): void
     {
         $this->assertEquals(self::totalItens, $this->collection->count());
         $this->assertInstanceOf(ArrayIterator::class, $this->collection->getIterator());
+    }
+
+    public function testGetById(): void
+    {
+        $id = 2;
+        $story = $this->collection->getById((string) $id);
+        $this->assertEquals($id, $story->getId());
     }
 
     protected function setUp()
@@ -25,12 +32,12 @@ class CollectionTest extends TestCase
         $this->collection = new Collection;
 
         for ($i=0; $i < self::totalItens; $i++) {
-            $this->collection->add(
-                new Story(
-                    self::title . " {$i}",
-                    Status::DRAFT()
-                )
+            $story = new Story(
+                self::title . " {$i}",
+                Status::DRAFT()
             );
+            $story->setId((string) $i);
+            $this->collection->add($story);
         }
     }
 }

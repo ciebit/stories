@@ -17,8 +17,6 @@ use function implode;
 
 class Sql extends SqlFilters implements Database
 {
-    static private $counterKey = 0;
-
     private $pdo; #: PDO
     private $table; #: string
 
@@ -30,7 +28,7 @@ class Sql extends SqlFilters implements Database
 
     public function addFilterByBody(string $operator, string $body): Database
     {
-        $key = 'body';
+        $key = $this->getValueKey();
         $field = '`story`.`body`';
         $sql = "{$field} {$operator} :{$key}";
 
@@ -41,30 +39,32 @@ class Sql extends SqlFilters implements Database
 
     public function addFilterById(string $operator, int ...$ids): Database
     {
-        $key = 'id';
+        $field = '`story`.`id`';
 
         if (count($ids) == 1) {
-            $sql = "`story`.`id` $operator :{$key}";
+            $key = $this->getValueKey();
+            $sql = "{$field} {$operator} :{$key}";
             $this->addfilter($key, $sql, PDO::PARAM_INT, $ids[0]);
             return $this;
         }
 
-        $keyPrefix = $key;
+        $keys = [];
 
         foreach ($ids as $id) {
-            $key = $keyPrefix . self::$counterKey++;
+            $key = $this->getValueKey();
             $this->addBind($key, PDO::PARAM_INT, $id);
             $keys[] = $key;
         }
 
         $keysSql = implode(', :', $keys);
-        $this->addSqlFilter("`story`.`id` {$operator} (:{$keysSql})");
+        $operator = str_replace(['=', '!='], ['IN', 'NOT IN'], $operator);
+        $this->addSqlFilter("{$field} {$operator} (:{$keysSql})");
         return $this;
     }
 
     public function addFilterByLanguage(string $operator, string $language): Database
     {
-        $key = 'laguage';
+        $key = $this->getValueKey();
         $field = '`story`.`language`';
         $sql = "{$field} {$operator} :{$key}";
 
@@ -75,7 +75,7 @@ class Sql extends SqlFilters implements Database
 
     public function addFilterByStatus(string $operator, Status $status): Database
     {
-        $key = 'status';
+        $key = $this->getValueKey();
         $sql = "`story`.`status` {$operator} :{$key}";
         $this->addFilter($key, $sql, PDO::PARAM_INT, $status->getValue());
         return $this;
@@ -83,7 +83,7 @@ class Sql extends SqlFilters implements Database
 
     public function addFilterByTitle(string $operator, string $title): Database
     {
-        $key = 'title';
+        $key = $this->getValueKey();
         $field = '`story`.`title`';
         $sql = "{$field} {$operator} :{$key}";
 

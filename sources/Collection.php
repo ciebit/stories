@@ -27,6 +27,17 @@ class Collection implements Countable
         return clone $this->stories;
     }
 
+    public function getById(string $id): ?Story
+    {
+        foreach ($this->getIterator() as $story) {
+            if ($story->getId() == $id) {
+                return $story;
+            }
+        }
+
+        return null;
+    }
+
     public function getIterator(): ArrayIterator
     {
         return $this->stories->getIterator();
