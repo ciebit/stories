@@ -13,8 +13,13 @@ use Ciebit\Stories\Storages\Database\SqlFilters;
 use Exception;
 use PDO;
 
+use function count;
+use function implode;
+
 class Sql extends SqlFilters implements Database
 {
+    static private $counterKey = 0;
+
     private $pdo; #: PDO
     private $table; #: string
 
@@ -35,12 +40,26 @@ class Sql extends SqlFilters implements Database
         return $this;
     }
 
-    public function addFilterById(int $id, string $operator = '='): Storage
+    public function addFilterById(string $operator, int ...$ids): Database
     {
         $key = 'id';
-        $sql = "`story`.`id` $operator :{$key}";
 
-        $this->addfilter($key, $sql, PDO::PARAM_INT, $id);
+        if (count($ids) == 1) {
+            $sql = "`story`.`id` $operator :{$key}";
+            $this->addfilter($key, $sql, PDO::PARAM_INT, $ids[0]);
+            return $this;
+        }
+
+        $keyPrefix = $key;
+
+        foreach ($ids as $id) {
+            $key = $keyPrefix . self::$counterKey++;
+            $this->addBind($key, PDO::PARAM_INT, $id);
+            $keys[] = $key;
+        }
+
+        $keysSql = implode(', :', $keys);
+        $this->addSqlFilter("`story`.`id` {$operator} (:{$keysSql})");
         return $this;
     }
 
