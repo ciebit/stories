@@ -9,4 +9,4 @@ CREATE TABLE IF NOT EXISTS `cb_stories` (
   `language`    varchar(6) DEFAULT NULL,
   `status`   tinyint(1) unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='version:1.0';
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='version:2.0';
