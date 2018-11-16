@@ -13,7 +13,7 @@ class Story
 {
     private $body; #:string
     private $dateTime; #:DateTime
-    private $id; #:int
+    private $id; #:string
     private $status; #:Status
     private $summary; #:string
     private $title; #:string
@@ -26,7 +26,7 @@ class Story
     {
         $this->body = '';
         $this->dateTime = new DateTime;
-        $this->id = 0;
+        $this->id = '';
         $this->status = $status;
         $this->summary = '';
         $this->title = $title;
@@ -48,7 +48,7 @@ class Story
         return $this->dateTime;
     }
 
-    public function getId(): int
+    public function getId(): string
     {
         return $this->id;
     }
@@ -100,7 +100,7 @@ class Story
         return $this;
     }
 
-    public function setId(int $id): self
+    public function setId(string $id): self
     {
         $this->id = $id;
         return $this;
@@ -143,6 +143,9 @@ class Story
         return $this;
     }
 
+    /**
+     *@throw Exception
+    */
     private function valid(): self
     {
         if (
