@@ -27,22 +27,22 @@ class SqlTest extends Connection
     {
         $database = $this->getDatabase();
         static $body = 'Texto da notícia 1';
-        $database->addFilterByBody($body, '=');
+        $database->addFilterByBody('=', $body);
         $story = $database->get();
         $this->assertEquals(1, $story->getId());
 
         $database = $this->getDatabase();
-        $database->addFilterByBody('%New 2', 'LIKE');
+        $database->addFilterByBody('LIKE', '%New 2');
         $story = $database->get();
         $this->assertEquals(2, $story->getId());
 
         $database = $this->getDatabase();
-        $database->addFilterByBody('Fourth New%', 'LIKE');
+        $database->addFilterByBody('LIKE', 'Fourth New%');
         $story = $database->get();
         $this->assertEquals(4, $story->getId());
 
         $database = $this->getDatabase();
-        $database->addFilterByBody('%Five%', 'LIKE');
+        $database->addFilterByBody('LIKE', '%Five%');
         $story = $database->get();
         $this->assertEquals(5, $story->getId());
     }
@@ -50,7 +50,7 @@ class SqlTest extends Connection
     public function testGetFilterByStatus(): void
     {
         $database = $this->getDatabase();
-        $database->addFilterByStatus(Status::ACTIVE());
+        $database->addFilterByStatus('=', Status::ACTIVE());
         $story = $database->get();
         $this->assertEquals(Status::ACTIVE(), $story->getStatus());
     }
@@ -59,7 +59,7 @@ class SqlTest extends Connection
     {
         $id = 2;
         $database = $this->getDatabase();
-        $database->addFilterById($id+0);
+        $database->addFilterById('=', $id+0);
         $story = $database->get();
         $this->assertEquals($id, $story->getId());
     }
@@ -68,22 +68,22 @@ class SqlTest extends Connection
     {
         $database = $this->getDatabase();
         static $title1 = 'Titulo da notícia 1';
-        $database->addFilterByTitle($title1, '=');
+        $database->addFilterByTitle('=', $title1);
         $story = $database->get();
         $this->assertEquals($title1, $story->getTitle());
 
         $database = $this->getDatabase();
-        $database->addFilterByTitle('%New 2', 'LIKE');
+        $database->addFilterByTitle('LIKE', '%New 2');
         $story = $database->get();
         $this->assertEquals(2, $story->getId());
 
         $database = $this->getDatabase();
-        $database->addFilterByTitle('Fourth New%', 'LIKE');
+        $database->addFilterByTitle('LIKE', 'Fourth New%');
         $story = $database->get();
         $this->assertEquals(4, $story->getId());
 
         $database = $this->getDatabase();
-        $database->addFilterByTitle('%Five%', 'LIKE');
+        $database->addFilterByTitle('LIKE', '%Five%');
         $story = $database->get();
         $this->assertEquals(5, $story->getId());
     }
@@ -92,17 +92,17 @@ class SqlTest extends Connection
     {
         $database = $this->getDatabase();
         static $spanish = 'es';
-        $database->addFilterByLanguage($spanish);
+        $database->addFilterByLanguage('=', $spanish);
         $story = $database->get();
         $this->assertEquals($spanish, $story->getLanguage());
 
         static $english = 'en';
-        $database->addFilterByLanguage($english);
+        $database->addFilterByLanguage('=', $english);
         $story2 = $database->get();
         $this->assertEquals($english, $story2->getLanguage());
 
         static $portuguese = 'pt-br';
-        $database->addFilterByLanguage($portuguese);
+        $database->addFilterByLanguage('=', $portuguese);
         $story3 = $database->get();
         $this->assertEquals($portuguese, $story3->getLanguage());
     }
@@ -118,7 +118,7 @@ class SqlTest extends Connection
     public function testGetAllFilterByStatus(): void
     {
         $database = $this->getDatabase();
-        $database->addFilterByStatus(Status::ACTIVE());
+        $database->addFilterByStatus('=', Status::ACTIVE());
         $stories = $database->getAll();
         $this->assertCount(3, $stories);
         $this->assertEquals(Status::ACTIVE(), $stories->getArrayObject()->offsetGet(0)->getStatus());
@@ -128,7 +128,7 @@ class SqlTest extends Connection
     {
         $id = 3;
         $database = $this->getDatabase();
-        $database->addFilterById($id+0);
+        $database->addFilterById('=', $id+0);
         $stories = $database->getAll();
         $this->assertCount(1, $stories);
         $this->assertEquals($id, $stories->getArrayObject()->offsetGet(0)->getId());
@@ -155,7 +155,7 @@ class SqlTest extends Connection
         $views = 13;
 
         $database = $this->getDatabase();
-        $database->addFilterById(2);
+        $database->addFilterById('=', 2);
         $story = $database->get();
         $story->setBody($body.'')
         ->setDateTime(clone $dateTime)

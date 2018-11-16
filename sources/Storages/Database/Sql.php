@@ -7,7 +7,6 @@ use Ciebit\Stories\Collection;
 use Ciebit\Stories\Builders\FromArray as BuilderFromArray;
 use Ciebit\Stories\Story;
 use Ciebit\Stories\Status;
-use Ciebit\Stories\Storages\Storage;
 use Ciebit\Stories\Storages\Database\Database;
 use Ciebit\Stories\Storages\Database\SqlFilters;
 use Exception;
@@ -29,7 +28,7 @@ class Sql extends SqlFilters implements Database
         $this->table = 'cb_stories';
     }
 
-    public function addFilterByBody(string $body, string $operator = '='): Storage
+    public function addFilterByBody(string $operator, string $body): Database
     {
         $key = 'body';
         $field = '`story`.`body`';
@@ -63,7 +62,18 @@ class Sql extends SqlFilters implements Database
         return $this;
     }
 
-    public function addFilterByStatus(Status $status, string $operator = '='): Storage
+    public function addFilterByLanguage(string $operator, string $language): Database
+    {
+        $key = 'laguage';
+        $field = '`story`.`language`';
+        $sql = "{$field} {$operator} :{$key}";
+
+        $this->addfilter($key, $sql, PDO::PARAM_STR, $language);
+
+        return $this;
+    }
+
+    public function addFilterByStatus(string $operator, Status $status): Database
     {
         $key = 'status';
         $sql = "`story`.`status` {$operator} :{$key}";
@@ -71,24 +81,13 @@ class Sql extends SqlFilters implements Database
         return $this;
     }
 
-    public function addFilterByTitle(string $title, string $operator = '='): Storage
+    public function addFilterByTitle(string $operator, string $title): Database
     {
         $key = 'title';
         $field = '`story`.`title`';
         $sql = "{$field} {$operator} :{$key}";
 
         $this->addfilter($key, $sql, PDO::PARAM_STR, $title);
-
-        return $this;
-    }
-
-    public function addFilterByLanguage(string $language, string $operator = '='): Storage
-    {
-        $key = 'laguage';
-        $field = '`story`.`language`';
-        $sql = "{$field} {$operator} :{$key}";
-
-        $this->addfilter($key, $sql, PDO::PARAM_STR, $language);
 
         return $this;
     }
@@ -167,7 +166,7 @@ class Sql extends SqlFilters implements Database
         return $this->pdo->query('SELECT FOUND_ROWS()')->fetchColumn();
     }
 
-    public function setStartingLine(int $lineInit): Storage
+    public function setStartingItem(int $lineInit): Database
     {
         parent::setOffset($lineInit);
         return $this;
@@ -179,7 +178,7 @@ class Sql extends SqlFilters implements Database
         return $this;
     }
 
-    public function setTotalLines(int $total): Storage
+    public function setTotalItems(int $total): Database
     {
         parent::setLimit($total);
         return $this;
@@ -188,7 +187,7 @@ class Sql extends SqlFilters implements Database
     /**
      * @throw Exception
     */
-    public function update(Story $story): Storage
+    public function update(Story $story): Database
     {
         $statement = $this->pdo->prepare("
             UPDATE `{$this->table}` SET
