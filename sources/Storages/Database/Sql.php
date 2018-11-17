@@ -29,7 +29,7 @@ class Sql extends SqlFilters implements Database
     public function addFilterByBody(string $operator, string $body): Database
     {
         $key = $this->getValueKey();
-        $field = '`story`.`body`';
+        $field = "`{$this->table}`.`body`";
         $sql = "{$field} {$operator} :{$key}";
 
         $this->addfilter($key, $sql, PDO::PARAM_STR, $body);
@@ -39,7 +39,7 @@ class Sql extends SqlFilters implements Database
 
     public function addFilterById(string $operator, int ...$ids): Database
     {
-        $field = '`story`.`id`';
+        $field = "`{$this->table}`.`id`";
 
         if (count($ids) == 1) {
             $key = $this->getValueKey();
@@ -65,7 +65,7 @@ class Sql extends SqlFilters implements Database
     public function addFilterByLanguage(string $operator, string $language): Database
     {
         $key = $this->getValueKey();
-        $field = '`story`.`language`';
+        $field = "`{$this->table}`.`language`";
         $sql = "{$field} {$operator} :{$key}";
 
         $this->addfilter($key, $sql, PDO::PARAM_STR, $language);
@@ -76,7 +76,7 @@ class Sql extends SqlFilters implements Database
     public function addFilterByStatus(string $operator, Status $status): Database
     {
         $key = $this->getValueKey();
-        $sql = "`story`.`status` {$operator} :{$key}";
+        $sql = "`{$this->table}`.`status` {$operator} :{$key}";
         $this->addFilter($key, $sql, PDO::PARAM_INT, $status->getValue());
         return $this;
     }
@@ -84,7 +84,7 @@ class Sql extends SqlFilters implements Database
     public function addFilterByTitle(string $operator, string $title): Database
     {
         $key = $this->getValueKey();
-        $field = '`story`.`title`';
+        $field = "`{$this->table}`.`title`";
         $sql = "{$field} {$operator} :{$key}";
 
         $this->addfilter($key, $sql, PDO::PARAM_STR, $title);
@@ -97,7 +97,7 @@ class Sql extends SqlFilters implements Database
         $statement = $this->pdo->prepare("
             SELECT
             {$this->getFields()}
-            FROM {$this->table} as `story`
+            FROM {$this->table}
             WHERE {$this->generateSqlFilters()}
             LIMIT 1
         ");
@@ -122,7 +122,7 @@ class Sql extends SqlFilters implements Database
         $statement = $this->pdo->prepare("
             SELECT SQL_CALC_FOUND_ROWS
             {$this->getFields()}
-            FROM {$this->table} as `story`
+            FROM {$this->table}
             WHERE {$this->generateSqlFilters()}
             {$this->generateSqlLimit()}
         ");
@@ -147,18 +147,18 @@ class Sql extends SqlFilters implements Database
 
     private function getFields(): string
     {
-        return '
-            `story`.`id`,
-            `story`.`title`,
-            `story`.`summary`,
-            `story`.`body`,
-            `story`.`datetime`,
-            `story`.`uri`,
-            `story`.`views`,
-            `story`.`language`,
-            `story`.`languages_references`,
-            `story`.`status`
-        ';
+        return "
+            `{$this->table}`.`id`,
+            `{$this->table}`.`title`,
+            `{$this->table}`.`summary`,
+            `{$this->table}`.`body`,
+            `{$this->table}`.`datetime`,
+            `{$this->table}`.`uri`,
+            `{$this->table}`.`views`,
+            `{$this->table}`.`language`,
+            `{$this->table}`.`languages_references`,
+            `{$this->table}`.`status`
+        ";
     }
 
     public function getTotalRows(): int
